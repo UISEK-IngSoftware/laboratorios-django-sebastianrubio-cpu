@@ -7,5 +7,6 @@ class Pokemon(models.Model):
     height = models.FloatField(null=False)
     weight = models.FloatField(null=False)
     
+    
     def __str__(self):
         return self.name
