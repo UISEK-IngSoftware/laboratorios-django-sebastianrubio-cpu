@@ -3,6 +3,7 @@ from django.template import loader
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Pokemon, Trainer
 from django.contrib.auth.views import LoginView
+from django.contrib.auth.forms import AuthenticationForm
 
 # --- OPERACIONES PARA POKEMON ---
 
