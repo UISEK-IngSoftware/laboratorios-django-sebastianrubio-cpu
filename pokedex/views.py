@@ -19,14 +19,14 @@ def edit_pokemon(request, id):
             pokemon.picture = request.FILES['picture']
             
         pokemon.save()
-        return redirect('index')
+        return redirect('pokedex:index')
         
     return render(request, 'edit_pokemon.html', {'pokemon': pokemon, 'trainers': trainers})
 
 def delete_pokemon(request, id):
     pokemon = get_object_or_404(Pokemon, id=id)
     pokemon.delete()
-    return redirect('index')
+    return redirect('pokedex:index')
 
 
 # --- OPERACIONES PARA TRAINER ---
@@ -47,14 +47,14 @@ def edit_trainer(request, id):
             trainer.picture = request.FILES['picture']
             
         trainer.save()
-        return redirect('index')
+        return redirect('pokedex:index')
         
     return render(request, 'edit_trainer.html', {'trainer': trainer})
 
 def delete_trainer(request, id):
     trainer = get_object_or_404(Trainer, id=id)
     trainer.delete()
-    return redirect('index')
+    return redirect('pokedex:index')
 
 
 # --- VISTAS DE RENDERIZADO (INDEX Y DISPLAY) ---

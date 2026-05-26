@@ -63,9 +63,10 @@
                         </h3>
                         
                         <div class="d-flex justify-content-center gap-2 mt-auto">
-                            <a href="{% url 'pokemon' id=pokemon.id %}" class="btn btn-sm btn-outline-primary px-3">Ver</a>
-                            <a href="{% url 'edit_pokemon' id=pokemon.id %}" class="btn btn-sm btn-outline-secondary">Editar</a>
-                            <a href="{% url 'delete_pokemon' id=pokemon.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Confirmar eliminación de {{ pokemon.name }}?')">Eliminar</a>
+
+                            <a href="{% url 'pokedex:pokemon' id=pokemon.id %}">Ver</a>
+                            <a href="{% url 'pokedex:edit_pokemon' id=pokemon.id %}">Editar</a>
+                            <a href="{% url 'pokedex:delete_pokemon' id=pokemon.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Confirmar eliminación de {{ pokemon.name }}?')">Eliminar</a>
                         </div>
 
                     </div>
@@ -98,9 +99,11 @@
                         </h3>
                         
                         <div class="d-flex justify-content-center gap-2 mt-auto">
-                            <a href="{% url 'trainer' id=trainer.id %}" class="btn btn-sm btn-outline-primary px-3">Ver</a>
-                            <a href="{% url 'edit_trainer' id=trainer.id %}" class="btn btn-sm btn-outline-secondary">Editar</a>
-                            <a href="{% url 'delete_trainer' id=trainer.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Confirmar eliminación de este entrenador?')">Eliminar</a>
+                            <a href="{% url 'pokedex:trainer' id=trainer.id %}" class="btn btn-sm btn-outline-primary px-3">Ver</a>
+    
+                            <a href="{% url 'pokedex:edit_trainer' id=trainer.id %}" class="btn btn-sm btn-outline-secondary">Editar</a>
+    
+                            <a href="{% url 'pokedex:delete_trainer' id=trainer.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Confirmar eliminación?')">Eliminar</a>
                         </div>
 
                     </div>
