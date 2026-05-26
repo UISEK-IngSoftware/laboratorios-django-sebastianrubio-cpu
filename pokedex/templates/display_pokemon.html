@@ -177,20 +177,25 @@
                         </div>
                     </div>
 
-                    <div class="screen-lcd mb-3">
-                        <div class="image-screen shadow-inner">
-                            <span class="text-secondary fw-bold" style="opacity: 0.5;">
-                                PLACEHOLDER IMAGE
+                <div class="screen-lcd mb-3">
+                     <div class="image-screen shadow-inner d-flex align-items-center justify-content-center overflow-hidden">
+                          {% if pokemon.picture %}
+                              <img src="{{ pokemon.picture.url }}" alt="{{ pokemon.name }}" class="img-fluid" style="max-height: 100%; object-fit: contain;">
+                            {% else %}
+                           <span class="text-secondary fw-bold" style="opacity: 0.5;">
+                             PLACEHOLDER IMAGE
                             </span>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mt-2 px-1">
-                            <div class="fw-bold text-secondary" style="font-size: 1.1rem;">Nº{{ pokemon.id|stringformat:"03d" }}</div>
-                            <div class="d-flex gap-1">
-                                <div class="kianita-btn"></div>
-                                <div class="kianita-btn"></div>
-                            </div>
-                        </div>
-                    </div>
+                             {% endif %}
+                  </div>
+    
+    <div class="d-flex justify-content-between align-items-center mt-2 px-1">
+        <div class="fw-bold text-secondary" style="font-size: 1.1rem;">Nº{{ pokemon.id|stringformat:"03d" }}</div>
+        <div class="d-flex gap-1">
+            <div class="kianita-btn"></div>
+            <div class="kianita-btn"></div>
+        </div>
+    </div>
+</div>
                     
                     <div class="d-flex justify-content-between px-2 mt-4">
                         <div class="kianita-btn" style="width: 35px; height: 35px; border-radius: 50%;"></div>

@@ -90,24 +90,28 @@
         <div class="container d-flex justify-content-center">
             <div class="passport-spread row g-0">
                 
-                <div class="col-md-5 page-left">
-                    <div class="text-center mb-4">
-                        <h5 class="text-secondary fw-bold">WORLD TRAINER FEDERATION</h5>
-                        <hr class="mx-auto w-50 border-secondary">
-                    </div>
-                    
-                    <div class="photo-box shadow-inner">
-                        <span class="text-muted small">FOTO OFICIAL<br>PENDIENTE</span>
-                    </div>
-                    
-                    <div class="text-center mt-3">
-                        <p class="info-label">Nivel de Autoridad</p>
-                        <p class="display-6 fw-bold text-primary">RANK {{ trainer.level }}</p>
-                        <div class="mt-2">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Pok%C3%A9_Ball_icon.svg" width="40" style="opacity: 0.2;">
-                        </div>
-                    </div>
-                </div>
+<div class="col-md-5 page-left">
+    <div class="text-center mb-4">
+        <h5 class="text-secondary fw-bold">WORLD TRAINER FEDERATION</h5>
+        <hr class="mx-auto w-50 border-secondary">
+    </div>
+    
+    <div class="photo-box shadow-inner d-flex align-items-center justify-content-center overflow-hidden">
+        {% if trainer.picture %}
+            <img src="{{ trainer.picture.url }}" alt="{{ trainer.first_name }}" class="img-fluid" style="max-height: 100%; object-fit: cover;">
+        {% else %}
+            <span class="text-muted small">FOTO OFICIAL<br>PENDIENTE</span>
+        {% endif %}
+    </div>
+    
+    <div class="text-center mt-3">
+        <p class="info-label">Nivel de Autoridad</p>
+        <p class="display-6 fw-bold text-primary">RANK {{ trainer.level }}</p>
+        <div class="mt-2">
+            <div style="width: 40px; height: 40px; background-color: #ddd; border-radius: 50%; margin: 0 auto; opacity: 0.2;"></div>
+        </div>
+    </div>
+</div>
 
                 <div class="col-md-7 page-right">
                     <div class="row">

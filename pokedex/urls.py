@@ -1,12 +1,16 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
+app_name = 'pokedex'
 urlpatterns = [
-    path('', views.index, name='index'),
     path('pokemon/<int:id>/', views.pokemon, name='pokemon'),
+    path('', views.index, name='index'),
     path('trainer/<int:id>/', views.trainer, name='trainer'),
     path('pokemon/edit/<int:id>/', views.edit_pokemon, name='edit_pokemon'),
     path('pokemon/delete/<int:id>/', views.delete_pokemon, name='delete_pokemon'),
     path('trainer/edit/<int:id>/', views.edit_trainer, name='edit_trainer'),
     path('trainer/delete/<int:id>/', views.delete_trainer, name='delete_trainer'),
+    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='index'), name='logout'),
 ]

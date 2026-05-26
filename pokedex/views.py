@@ -1,20 +1,20 @@
 from django.http import HttpResponse
 from django.template import loader
-from .models import Pokemon, Trainer
 from django.shortcuts import render, redirect, get_object_or_404
-from django.conf import settings
 from .models import Pokemon, Trainer
+from django.contrib.auth.views import LoginView
 
+# --- OPERACIONES PARA POKEMON ---
 
 def edit_pokemon(request, id):
     pokemon = get_object_or_404(Pokemon, id=id)
-    trainers = Trainer.objects.all() # Necesario si el modelo tiene llave foránea a Trainer
+    trainers = Trainer.objects.all()
     
     if request.method == 'POST':
         pokemon.name = request.POST.get('name')
         pokemon.type = request.POST.get('type')
         
-        # Procesar nueva imagen solo si se cargó un archivo
+        # Procesamiento estricto del archivo multimedia
         if 'picture' in request.FILES:
             pokemon.picture = request.FILES['picture']
             
@@ -35,14 +35,14 @@ def edit_trainer(request, id):
     trainer = get_object_or_404(Trainer, id=id)
     
     if request.method == 'POST':
-        # Mapeo explícito a las nuevas columnas del modelo
+        # Mapeo corregido a las columnas reales de la base de datos
         trainer.first_name = request.POST.get('first_name')
         trainer.last_name = request.POST.get('last_name')
         trainer.birth_date = request.POST.get('birth_date')
         trainer.level = request.POST.get('level')
         trainer.region = request.POST.get('region')
         
-        # Procesamiento del archivo físico de imagen
+        # Procesamiento estricto del archivo multimedia
         if 'picture' in request.FILES:
             trainer.picture = request.FILES['picture']
             
@@ -50,11 +50,14 @@ def edit_trainer(request, id):
         return redirect('index')
         
     return render(request, 'edit_trainer.html', {'trainer': trainer})
+
 def delete_trainer(request, id):
     trainer = get_object_or_404(Trainer, id=id)
     trainer.delete()
     return redirect('index')
 
+
+# --- VISTAS DE RENDERIZADO (INDEX Y DISPLAY) ---
 
 def index(request):
     pokemons = Pokemon.objects.all()
@@ -63,13 +66,12 @@ def index(request):
     
     context = {
         'pokemons': pokemons,
-        'trainers': trainers,
-        'MEDIA_URL': settings.MEDIA_URL
+        'trainers': trainers
     }
     return HttpResponse(template.render(context, request))
 
 def pokemon(request, id: int):
-    pokemon = Pokemon.objects.get(id=id)
+    pokemon = get_object_or_404(Pokemon, id=id)
     template = loader.get_template('display_pokemon.html')
     context = {
         'pokemon': pokemon
@@ -77,10 +79,12 @@ def pokemon(request, id: int):
     return HttpResponse(template.render(context, request))
 
 def trainer(request, id: int):
-    trainer = Trainer.objects.get(id=id)
-    # Necesitas crear este template 'display_trainer.html' en tu carpeta templates
+    trainer = get_object_or_404(Trainer, id=id)
     template = loader.get_template('display_trainer.html') 
     context = {
         'trainer': trainer
     }
     return HttpResponse(template.render(context, request))
+
+class CustomLogInView(LoginView):
+    template_name = 'login.html'
