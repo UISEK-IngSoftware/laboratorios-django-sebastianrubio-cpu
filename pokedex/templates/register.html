@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Registro{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-5">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <h2 class="h4 mb-4 fw-bold text-center">Crear cuenta de usuario</h2>
+                
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label">{{ field.label }}</label>
+                            {{ field }}
+                            <div class="text-danger small">{{ field.errors }}</div>
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Registrarse</button>
+                    <a href="{% url 'pokedex:login' %}" class="btn btn-link w-100 text-decoration-none">¿Ya tienes cuenta? Inicia sesión</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Asegurar que los inputs se vean bonitos */
+    .card input {
+        border: 1px solid #ced4da;
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        width: 100%;
+    }
+</style>
+{% endblock %}

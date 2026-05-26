@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
 ]
 
 ROOT_URLCONF = 'lab8.urls'
@@ -123,9 +124,9 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # Redirección tras un login exitoso
-LOGIN_REDIRECT_URL = 'index'
-
-LOGIN_URL = 'login'
+LOGIN_URL = 'pokedex:login'
+LOGIN_REDIRECT_URL = 'pokedex:index'  # A dónde ir tras iniciar sesión
+LOGOUT_REDIRECT_URL = 'pokedex:login' # A dónde ir tras cerrar sesión
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

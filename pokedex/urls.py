@@ -11,6 +11,7 @@ urlpatterns = [
     path('pokemon/delete/<int:id>/', views.delete_pokemon, name='delete_pokemon'),
     path('trainer/edit/<int:id>/', views.edit_trainer, name='edit_trainer'),
     path('trainer/delete/<int:id>/', views.delete_trainer, name='delete_trainer'),
-    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='index'), name='logout'),
+    path('login/', views.CustomLogInView.as_view(), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='pokedex:index'), name='logout'),
+    path('register/', views.RegisterView.as_view(), name='register'),
 ]
