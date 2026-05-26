@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.template import loader
 from .models import Pokemon, Trainer
 from django.shortcuts import render, redirect, get_object_or_404
+from django.conf import settings
 from .models import Pokemon, Trainer
 
 
@@ -58,7 +59,8 @@ def index(request):
     
     context = {
         'pokemons': pokemons,
-        'trainers': trainers
+        'trainers': trainers,
+        'MEDIA_URL': settings.MEDIA_URL
     }
     return HttpResponse(template.render(context, request))
 
