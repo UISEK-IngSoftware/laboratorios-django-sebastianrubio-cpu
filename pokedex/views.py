@@ -1,6 +1,55 @@
 from django.http import HttpResponse
 from django.template import loader
 from .models import Pokemon, Trainer
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Pokemon, Trainer
+
+
+def edit_pokemon(request, id):
+    pokemon = get_object_or_404(Pokemon, id=id)
+    trainers = Trainer.objects.all() # Necesario si el modelo tiene llave foránea a Trainer
+    
+    if request.method == 'POST':
+        pokemon.name = request.POST.get('name')
+        pokemon.type = request.POST.get('type')
+        
+        # Procesar nueva imagen solo si se cargó un archivo
+        if 'picture' in request.FILES:
+            pokemon.picture = request.FILES['picture']
+            
+        pokemon.save()
+        return redirect('index')
+        
+    return render(request, 'edit_pokemon.html', {'pokemon': pokemon, 'trainers': trainers})
+
+def delete_pokemon(request, id):
+    pokemon = get_object_or_404(Pokemon, id=id)
+    pokemon.delete()
+    return redirect('index')
+
+
+# --- OPERACIONES PARA TRAINER ---
+
+def edit_trainer(request, id):
+    trainer = get_object_or_404(Trainer, id=id)
+    
+    if request.method == 'POST':
+        trainer.name = request.POST.get('name')
+        trainer.region = request.POST.get('region')
+        
+        if 'picture' in request.FILES:
+            trainer.picture = request.FILES['picture']
+            
+        trainer.save()
+        return redirect('index')
+        
+    return render(request, 'edit_trainer.html', {'trainer': trainer})
+
+def delete_trainer(request, id):
+    trainer = get_object_or_404(Trainer, id=id)
+    trainer.delete()
+    return redirect('index')
+
 
 def index(request):
     pokemons = Pokemon.objects.all()
