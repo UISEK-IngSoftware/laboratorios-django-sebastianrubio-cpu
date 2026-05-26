@@ -12,11 +12,17 @@
         .banner-pokemon {
             background-color: #0a285f;
             border-bottom: 4px solid #ffcb05;
-            padding: 30px 20px;
+            padding: 25px 20px;
         }
-        .banner-logo {
-            max-height: 80px;
-            object-fit: contain;
+        .banner-title {
+            color: #ffcb05;
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 3px 3px 0px #1d4ed8;
+            margin: 0;
+            font-family: 'Arial Black', sans-serif;
         }
         .preview-container {
             max-width: 150px;
@@ -36,7 +42,7 @@
 <body>
     
     <div class="banner-pokemon text-center mb-5 shadow-sm">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg" alt="Pokémon" class="banner-logo">
+        <h1 class="banner-title">Mi Pokedex</h1>
     </div>
 
     <div class="container mb-5" style="max-width: 600px;">
@@ -47,23 +53,49 @@
                 {% csrf_token %}
                 
                 <div class="mb-3">
-                    <label class="form-label fw-bold text-secondary">Nombre del Entrenador</label>
-                    <input type="text" name="name" class="form-control" value="{{ trainer.name }}" required>
+                    <label class="form-label fw-bold text-secondary">Nombre (First Name)</label>
+                    <input type="text" name="first_name" class="form-control" value="{{ trainer.first_name }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold text-secondary">Apellido (Last Name)</label>
+                    <input type="text" name="last_name" class="form-control" value="{{ trainer.last_name }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold text-secondary">Fecha de Nacimiento</label>
+                    <input type="date" name="birth_date" class="form-control" value="{{ trainer.birth_date|date:'Y-m-d' }}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold text-secondary">Nivel</label>
+                    <input type="number" name="level" class="form-control" value="{{ trainer.level }}" required>
                 </div>
                 
                 <div class="mb-3">
                     <label class="form-label fw-bold text-secondary">Región de Origen</label>
-                    <input type="text" name="region" class="form-control" value="{{ trainer.region }}" required>
+                    <select name="region" class="form-select" required>
+                        <option value="K" {% if trainer.region == 'K' %}selected{% endif %}>Kanto</option>
+                        <option value="J" {% if trainer.region == 'J' %}selected{% endif %}>Johto</option>
+                        <option value="H" {% if trainer.region == 'H' %}selected{% endif %}>Hoenn</option>
+                        <option value="S" {% if trainer.region == 'S' %}selected{% endif %}>Sinnoh</option>
+                        <option value="U" {% if trainer.region == 'U' %}selected{% endif %}>Unova</option>
+                        <option value="KA" {% if trainer.region == 'KA' %}selected{% endif %}>Kalos</option>
+                        <option value="A" {% if trainer.region == 'A' %}selected{% endif %}>Alola</option>
+                        <option value="G" {% if trainer.region == 'G' %}selected{% endif %}>Galar</option>
+                        <option value="P" {% if trainer.region == 'P' %}selected{% endif %}>Paldea</option>
+                        <option value="NA" {% if trainer.region == 'NA' %}selected{% endif %}>No Definida</option>
+                    </select>
                 </div>
                 
                 <div class="mb-4">
                     <label class="form-label fw-bold text-secondary">Fotografía / Avatar</label>
                     {% if trainer.picture %}
                         <div class="mb-3 p-2 border rounded preview-container mx-auto">
-                            <img src="{{ trainer.picture.url }}" alt="{{ trainer.name }}">
+                            <img src="{{ trainer.picture.url }}" alt="Avatar actual">
                         </div>
                     {% endif %}
-                    <input type="file" name="picture" class="form-control">
+                    <input type="file" name="picture" class="form-control" accept=".png, .jpg, .jpeg">
                     <div class="form-text">Suba un archivo nuevo solo si desea reemplazar la foto actual.</div>
                 </div>
                 

@@ -35,9 +35,14 @@ def edit_trainer(request, id):
     trainer = get_object_or_404(Trainer, id=id)
     
     if request.method == 'POST':
-        trainer.name = request.POST.get('name')
+        # Mapeo explícito a las nuevas columnas del modelo
+        trainer.first_name = request.POST.get('first_name')
+        trainer.last_name = request.POST.get('last_name')
+        trainer.birth_date = request.POST.get('birth_date')
+        trainer.level = request.POST.get('level')
         trainer.region = request.POST.get('region')
         
+        # Procesamiento del archivo físico de imagen
         if 'picture' in request.FILES:
             trainer.picture = request.FILES['picture']
             
@@ -45,7 +50,6 @@ def edit_trainer(request, id):
         return redirect('index')
         
     return render(request, 'edit_trainer.html', {'trainer': trainer})
-
 def delete_trainer(request, id):
     trainer = get_object_or_404(Trainer, id=id)
     trainer.delete()
