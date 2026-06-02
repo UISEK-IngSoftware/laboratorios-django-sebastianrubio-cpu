@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('pokedex.urls')), # Delega todo el tráfico a la aplicación interna
+    path('api/', include ('api.urls')),
 ]
 
 # Configuración exclusiva para servir archivos multimedia en entorno local

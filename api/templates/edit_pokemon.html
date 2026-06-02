@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Pokémon</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #ffffff !important; /* Fondo blanco coincidente */
+        }
+        .banner-pokemon {
+            background-color: #0a285f;
+            border-bottom: 4px solid #ffcb05;
+            padding: 30px 20px;
+        }
+        .banner-logo {
+            max-height: 80px;
+            object-fit: contain;
+        }
+        .preview-container {
+            max-width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fdfdfd;
+        }
+        .preview-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="banner-pokemon text-center mb-5 shadow-sm">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pok%C3%A9mon_logo.svg" alt="Pokémon" class="banner-logo">
+    </div>
+
+    <div class="container mb-5" style="max-width: 600px;">
+        <div class="card p-4 border rounded shadow-sm bg-white">
+            <h2 class="h4 text-dark border-bottom pb-2 mb-4 fw-bold">Modificar Registro de Pokémon</h2>
+            
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold text-secondary">Nombre del Pokémon</label>
+                    <input type="text" name="name" class="form-control" value="{{ pokemon.name }}" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold text-secondary">Tipo</label>
+                    <input type="text" name="type" class="form-control" value="{{ pokemon.type }}" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label fw-bold text-secondary">Imagen de Portada</label>
+                    {% if pokemon.picture %}
+                        <div class="mb-3 p-2 border rounded preview-container mx-auto">
+                            <img src="{{ pokemon.picture.url }}" alt="{{ pokemon.name }}">
+                        </div>
+                    {% endif %}
+                    
+                    <input type="file" name="picture" class="form-control" accept=".png, .jpg, .jpeg">
+                    <div class="form-text">Suba un archivo nuevo solo si desea reemplazar la imagen actual.</div>
+                </div>
+                
+                <div class="d-flex justify-content-between border-top pt-3">
+                    <a href="{% url 'pokedex:index' %}" class="btn btn-outline-secondary px-4">Cancelar</a>
+                    <button type="submit" class="btn btn-primary px-4" style="background-color: #0a285f; border-color: #0a285f;">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

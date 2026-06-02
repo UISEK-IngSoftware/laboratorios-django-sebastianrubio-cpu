@@ -1,0 +1,243 @@
+<html>
+    <head>
+        <title>Pokédex Johto - {{ pokemon.name | capfirst }}</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+        
+        <style>
+            body {
+                font-family: 'Nunito', sans-serif;
+                background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem 0;
+            }
+            
+            /* Contenedor transparente, solo maneja la perspectiva 3D */
+            .pokedex-johto {
+                max-width: 900px;
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                perspective: 1800px; /* Profundidad de campo aumentada */
+            }
+
+            /* Carcasa Izquierda (Estática) */
+            .left-housing {
+                flex: 1;
+                min-width: 350px;
+                padding: 30px;
+                background-color: #0080ff; /* Color asignado directamente a la tapa */
+                border: 2px solid #0056b3;
+                border-right: 4px solid #003d82; /* Simulación de bisagra */
+                border-radius: 12px 0 0 12px;
+                box-shadow: 10px 10px 25px rgba(0,0,0,0.4), inset 3px 3px 8px rgba(255,255,255,0.2);
+                z-index: 2;
+            }
+
+            /* Carcasa Derecha (Dinámica/Animada) */
+            .right-housing {
+                flex: 1;
+                min-width: 350px;
+                padding: 30px;
+                display: flex;
+                flex-direction: column;
+                background-color: #0080ff; /* Color asignado directamente a la tapa */
+                border: 2px solid #0056b3;
+                border-left: none;
+                border-radius: 0 12px 12px 0;
+                
+                /* Configuración de la animación más lenta */
+                transform-origin: left center;
+                animation: openPokedex 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+                opacity: 0;
+                /* El renderizado 3D para la sombra se maneja en los keyframes */
+            }
+
+            @keyframes openPokedex {
+                0% {
+                    transform: rotateY(-150deg);
+                    opacity: 1;
+                    box-shadow: -15px 15px 25px rgba(0,0,0,0.5);
+                }
+                100% {
+                    transform: rotateY(0deg);
+                    opacity: 1;
+                    box-shadow: 10px 10px 25px rgba(0,0,0,0.4), inset -3px -3px 8px rgba(0,0,0,0.2);
+                }
+            }
+
+            /* Elementos internos */
+            .lense-container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 20px;
+            }
+            .chrome-bezel {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #bdc3c7, #fff, #95a5a6);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            }
+            .cyan-lense {
+                width: 65px;
+                height: 65px;
+                border-radius: 50%;
+                background: radial-gradient(circle at 30% 30%, #a0e6e6, #00cccc 60%, #008080);
+                border: 3px solid #0080ff;
+                box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+            }
+
+            .kianita-btn {
+                width: 25px;
+                height: 25px;
+                background-color: #333;
+                border-radius: 3px;
+                border: 1px solid #000;
+                box-shadow: inset 1px 1px 3px rgba(255,255,255,0.1), 1px 1px 2px rgba(0,0,0,0.3);
+            }
+
+            .screen-lcd {
+                background-color: #f8f9fa;
+                border-radius: 8px;
+                padding: 10px;
+                border: 1px solid #b0bec5;
+                box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+            }
+            .image-screen {
+                background: linear-gradient(to bottom right, #eceff1, #cfd8dc);
+                border-radius: 5px;
+                height: 220px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: 1px solid #b0bec5;
+            }
+
+            .data-lcd {
+                background-color: #e0f7fa; 
+                border-radius: 8px;
+                padding: 20px;
+                border: 1px solid #81d4fa;
+                box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
+                color: #01579b;
+                flex-grow: 1;
+                font-size: 1.1rem;
+            }
+            
+            .data-row {
+                display: flex;
+                justify-content: space-between;
+                border-bottom: 1px solid rgba(1, 87, 155, 0.15);
+                margin-bottom: 10px;
+                padding-bottom: 5px;
+            }
+            
+            .data-label { opacity: 0.8; font-weight: 600; }
+            .data-value { font-weight: bold; }
+
+            .btn-return {
+                background-color: rgba(0, 0, 0, 0.1);
+                color: #fff;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                padding: 10px 20px;
+                border-radius: 6px;
+                border: 1px solid rgba(255,255,255,0.15);
+                transition: all 0.2s;
+                text-decoration: none;
+                text-align: center;
+                display: inline-block;
+                width: 100%;
+            }
+            .btn-return:hover {
+                background-color: rgba(0, 0, 0, 0.2);
+                color: #fff;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="container d-flex justify-content-center">
+            <div class="pokedex-johto">
+                
+                <div class="left-housing">
+                    <div class="lense-container">
+                        <div class="chrome-bezel">
+                            <div class="cyan-lense"></div>
+                        </div>
+                    </div>
+
+                <div class="screen-lcd mb-3">
+                     <div class="image-screen shadow-inner d-flex align-items-center justify-content-center overflow-hidden">
+                          {% if pokemon.picture %}
+                              <img src="{{ pokemon.picture.url }}" alt="{{ pokemon.name }}" class="img-fluid" style="max-height: 100%; object-fit: contain;">
+                            {% else %}
+                           <span class="text-secondary fw-bold" style="opacity: 0.5;">
+                             PLACEHOLDER IMAGE
+                            </span>
+                             {% endif %}
+                  </div>
+    
+    <div class="d-flex justify-content-between align-items-center mt-2 px-1">
+        <div class="fw-bold text-secondary" style="font-size: 1.1rem;">Nº{{ pokemon.id|stringformat:"03d" }}</div>
+        <div class="d-flex gap-1">
+            <div class="kianita-btn"></div>
+            <div class="kianita-btn"></div>
+        </div>
+    </div>
+</div>
+                    
+                    <div class="d-flex justify-content-between px-2 mt-4">
+                        <div class="kianita-btn" style="width: 35px; height: 35px; border-radius: 50%;"></div>
+                        <div style="width: 70px; height: 10px; background-color: #333; border-radius: 5px;"></div>
+                    </div>
+                </div>
+
+                <div class="right-housing">
+                    <div class="data-lcd mb-4 shadow-inner">
+                        <div class="mb-4 text-center">
+                            <h2 class="fw-bold mb-0 text-uppercase">{{ pokemon.name }}</h2>
+                        </div>
+                        
+                        <div class="data-row">
+                            <span class="data-label">TIPO:</span>
+                            <span class="data-value">{{ pokemon.get_type_display | upper }}</span>
+                        </div>
+                        
+                        <div class="data-row">
+                            <span class="data-label">ALTURA:</span>
+                            <span class="data-value">{{ pokemon.height }} M</span>
+                        </div>
+                        
+                        <div class="data-row">
+                            <span class="data-label">PESO:</span>
+                            <span class="data-value">{{ pokemon.weight }} KG</span>
+                        </div>
+
+                        <div class="data-row">
+                            <span class="data-label">ENTRENADOR:</span>
+                            <span class="data-value">{{ pokemon.trainer }}</span>
+                        </div>
+
+                    </div>
+
+                    <div class="mt-auto pt-3 border-top border-dark border-opacity-25">
+                        <a href="{% url 'pokedex:index' %}" class="btn-return">VOLVER AL MENÚ PRINCIPAL</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </body>
+</html>

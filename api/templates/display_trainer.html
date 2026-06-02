@@ -1,0 +1,156 @@
+<html>
+    <head>
+        <title>Passport - {{ trainer.first_name | capfirst }}</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Special+Elite&display=swap" rel="stylesheet">
+        
+        <style>
+            body {
+                font-family: 'Nunito', sans-serif;
+                background: #2c3e50;
+                padding-top: 50px;
+            }
+            /* Contenedor principal que simula el pasaporte abierto */
+            .passport-spread {
+                max-width: 950px;
+                background: #fdf6e3; /* Color papel viejo */
+                border-radius: 20px;
+                box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+                border: 12px solid #5d1c1c; /* Borde cuero oscuro */
+                position: relative;
+                overflow: hidden;
+            }
+            /* Línea central de plegado */
+            .passport-spread::before {
+                content: "";
+                position: absolute;
+                left: 50%;
+                top: 0;
+                bottom: 0;
+                width: 2px;
+                background: rgba(0,0,0,0.1);
+                box-shadow: 0 0 10px rgba(0,0,0,0.2);
+                z-index: 10;
+            }
+            .page-left { border-right: 1px solid rgba(0,0,0,0.05); padding: 40px; }
+            .page-right { padding: 40px; background-image: radial-gradient(#dcd5c0 1px, transparent 1px); background-size: 20px 20px; }
+            
+            .photo-box {
+                width: 200px;
+                height: 250px;
+                background: #e2e8f0;
+                border: 4px double #3b4cca;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 20px;
+                filter: sepia(0.3);
+            }
+            .info-label {
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 0.7rem;
+                color: #8b4513;
+                text-transform: uppercase;
+                font-weight: bold;
+                margin-bottom: 0;
+            }
+            .info-value {
+                font-family: 'Special Elite', cursive; /* Fuente tipo máquina de escribir */
+                font-size: 1.3rem;
+                color: #2c3e50;
+                margin-bottom: 15px;
+                border-bottom: 1px dashed #8b4513;
+            }
+            .stamps-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                justify-content: center;
+                opacity: 0.6;
+            }
+            .visa-stamp {
+                border: 4px solid #ef4444;
+                color: #ef4444;
+                padding: 10px;
+                font-weight: 900;
+                text-transform: uppercase;
+                transform: rotate(-20deg);
+                border-radius: 50%;
+                width: 100px;
+                height: 100px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                font-size: 0.8rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container d-flex justify-content-center">
+            <div class="passport-spread row g-0">
+                
+<div class="col-md-5 page-left">
+    <div class="text-center mb-4">
+        <h5 class="text-secondary fw-bold">WORLD TRAINER FEDERATION</h5>
+        <hr class="mx-auto w-50 border-secondary">
+    </div>
+    
+    <div class="photo-box shadow-inner d-flex align-items-center justify-content-center overflow-hidden">
+        {% if trainer.picture %}
+            <img src="{{ trainer.picture.url }}" alt="{{ trainer.first_name }}" class="img-fluid" style="max-height: 100%; object-fit: cover;">
+        {% else %}
+            <span class="text-muted small">FOTO OFICIAL<br>PENDIENTE</span>
+        {% endif %}
+    </div>
+    
+    <div class="text-center mt-3">
+        <p class="info-label">Nivel de Autoridad</p>
+        <p class="display-6 fw-bold text-primary">RANK {{ trainer.level }}</p>
+        <div class="mt-2">
+            <div style="width: 40px; height: 40px; background-color: #ddd; border-radius: 50%; margin: 0 auto; opacity: 0.2;"></div>
+        </div>
+    </div>
+</div>
+
+                <div class="col-md-7 page-right">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <h4 class="text-end text-muted fw-light">P.N. #{{ trainer.id|stringformat:"06d" }}</h4>
+                        </div>
+                        <div class="col-12">
+                            <p class="info-label">Apellidos / Surnames</p>
+                            <p class="info-value">{{ trainer.last_name | upper }}</p>
+                        </div>
+                        <div class="col-12">
+                            <p class="info-label">Nombres / Given Names</p>
+                            <p class="info-value">{{ trainer.first_name | upper }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="info-label">Nacimiento / Date of Birth</p>
+                            <p class="info-value">{{ trainer.birth_date | date:"d-M-Y" }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="info-label">Región / Origin</p>
+                            <p class="info-value">{{ trainer.get_region_display | upper }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-5">
+                        <p class="info-label text-center mb-4">Validaciones de Liga</p>
+                        <div class="stamps-container">
+                            <div class="visa-stamp">INDIGO<br>PLATEAU</div>
+                            <div class="visa-stamp" style="border-color: #3b4cca; color: #3b4cca; transform: rotate(10deg);">OFICIAL<br>UI-SEK</div>
+                            <div class="visa-stamp" style="border-color: #10b981; color: #10b981;">ELITE<br>FOUR</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="text-center mt-5 pb-5">
+            <a href="{% url 'pokedex:index' %}" class="btn btn-outline-light px-5 rounded-pill fw-bold border-2">CERRAR DOCUMENTO</a>
+        </div>
+    </body>
+</html>

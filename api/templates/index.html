@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Pokedex - Catálogo{% endblock %}
+
+{% block content %}
+    <div class="mb-5">
+        <h2 class="h4 text-dark border-bottom pb-2 mb-4 fw-bold">Pokemons</h2>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            {% for pokemon in pokemons %}
+            <div class="col">
+                <div class="card h-100 p-3 border rounded shadow-sm bg-white text-center">
+                    <div class="image-container mb-3 border rounded">
+                        {% if pokemon.picture %}
+                            <img src="{{ pokemon.picture.url }}" alt="{{ pokemon.name }}">
+                        {% else %}
+                            <img src="https://via.placeholder.com/250x250/f8f9fa/6c757d?text=Sin+Foto" alt="Sin foto">
+                        {% endif %}
+                    </div>
+                    <h3 class="h5 card-title fw-bold text-dark mb-3">{{ pokemon.name | capfirst }}</h3>
+                    <div class="d-flex justify-content-center gap-2 mt-auto">
+                        <a href="{% url 'pokedex:pokemon' id=pokemon.id %}">Ver</a>
+                        {% if user.is_staff %}
+                            <a href="{% url 'pokedex:edit_pokemon' id=pokemon.id %}">Editar</a>
+                            <a href="{% url 'pokedex:delete_pokemon' id=pokemon.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Confirmar?')">Eliminar</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+                <p class="text-muted">No hay Pokémon registrados.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="mb-5">
+        <h2 class="h4 text-dark border-bottom pb-2 mb-4 fw-bold">Trainers</h2>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            {% for trainer in trainers %}
+            <div class="col">
+                <div class="card h-100 p-3 border rounded shadow-sm bg-white text-center">
+                    <div class="image-container mb-3 border rounded">
+                        {% if trainer.picture %}
+                            <img src="{{ trainer.picture.url }}" alt="{{ trainer.first_name }}">
+                        {% else %}
+                            <img src="https://via.placeholder.com/250x250/f8f9fa/6c757d?text=Sin+Foto" alt="Sin foto">
+                        {% endif %}
+                    </div>
+                    <h3 class="h5 card-title fw-bold text-dark mb-3">
+                        {{ trainer.first_name | capfirst }} {{ trainer.last_name | capfirst }}
+                    </h3>
+                    <div class="d-flex justify-content-center gap-2 mt-auto">
+                        <a href="{% url 'pokedex:trainer' id=trainer.id %}" class="btn btn-sm btn-outline-primary">Ver</a>
+                        {% if user.is_staff %}
+                            <a href="{% url 'pokedex:edit_trainer' id=trainer.id %}" class="btn btn-sm btn-outline-secondary">Editar</a>
+                            <a href="{% url 'pokedex:delete_trainer' id=trainer.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Confirmar?')">Eliminar</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+                <p class="text-muted">No hay entrenadores registrados.</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
