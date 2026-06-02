@@ -26,7 +26,7 @@ class Trainer(models.Model):
     )
     
     # Campo configurado para guardar el archivo físico y aceptar png, jpg y jpeg
-    picture = models.ImageField(
+    picture = models.FileField(
         upload_to='trainers/', 
         null=True, 
         blank=True,
@@ -61,7 +61,7 @@ class Pokemon(models.Model):
     trainer = models.ForeignKey(Trainer, on_delete=models.CASCADE, null=True, blank=True)
     
     # Campo configurado para guardar el archivo físico y aceptar png, jpg y jpeg
-    picture = models.ImageField(
+    picture = models.FileField(
         upload_to='pokemons/', 
         null=True, 
         blank=True,

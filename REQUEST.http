@@ -1,0 +1,2 @@
+GET http://127.0.0.1:8000/api/pokemons/
+POST http://127.0.0.1:8000/api/pokemons/
