@@ -1,8 +1,9 @@
-from django.contrib import admin
 from django.urls import path, include
+from rest_framework import routers
+from .views import PokemonViewSet # 
+router = routers.DefaultRouter()
+router.register(r'pokemons', PokemonViewSet)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('api.urls')), # Esta línea es crítica
-    # Posiblemente también tengas: path('', include('pokedex.urls')),
+    path('', include(router.urls))
 ]

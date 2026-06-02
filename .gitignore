@@ -159,7 +159,6 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 
-
 # General
 .DS_Store
 .AppleDouble
@@ -167,7 +166,6 @@ cython_debug/
 
 # Icon must end with two \r
 Icon
-
 
 # Thumbnails
 ._*
@@ -187,3 +185,9 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Visual Studio (Reglas críticas añadidas)
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
