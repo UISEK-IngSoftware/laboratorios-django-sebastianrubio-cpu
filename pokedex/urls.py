@@ -14,4 +14,7 @@ urlpatterns = [
     path('login/', views.CustomLogInView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='pokedex:index'), name='logout'),
     path('register/', views.RegisterView.as_view(), name='register'),
+    path('pokemon/add/', views.add_pokemon, name='add_pokemon'),
+    path('pokemon/<int:id>/', views.pokemon, name='pokemon'),
+    path('', views.index, name='index'),
 ]
