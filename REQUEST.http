@@ -1,2 +1,10 @@
+DELETE http://127.0.0.1:8000/api/pokemons/1/
+
+DELETE http://127.0.0.1:8000/api/trainers/1/
+
 GET http://127.0.0.1:8000/api/pokemons/
-POST http://127.0.0.1:8000/api/pokemons/
+DELETE http://127.0.0.1:8000/api/pokemons/1/
+
+#http://127.0.0.1:8000/api/pokemons/1/?format=api
+#http://127.0.0.1:8000/api/pokemons/?format=api
+#http://127.0.0.1:8000/api/trainers/
