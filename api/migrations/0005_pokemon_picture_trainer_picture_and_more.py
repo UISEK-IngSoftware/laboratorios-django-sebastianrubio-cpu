@@ -8,7 +8,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pokedex', '0004_pokemon_trainer'),
+        ('api', '0004_pokemon_trainer'),
     ]
 
     operations = [

@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pokedex', '0006_alter_trainer_picture'),
+        ('api', '0006_alter_trainer_picture'),
     ]
 
     operations = [
