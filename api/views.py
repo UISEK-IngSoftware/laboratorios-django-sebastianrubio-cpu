@@ -1,26 +1,34 @@
-import requests
-from django.contrib.auth.models import User
+from rest_framework import permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import viewsets
+import requests
+from django.contrib.auth.models import User
 from .serializer import PokemonSerializer, TrainerSerializer
 from pokedex.models import Pokemon, Trainer
 
+class IsAdminOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return request.user and request.user.is_authenticated
+        
+        return request.user and request.user.is_authenticated and (
+            request.user.is_staff or request.user.groups.filter(name='Admin').exists()
+        )
 
 class PokemonViewSet(viewsets.ModelViewSet):
     queryset = Pokemon.objects.all()
     serializer_class = PokemonSerializer
+    permission_classes = [IsAdminOrReadOnly]
 
 class TrainerViewSet(viewsets.ModelViewSet):
     queryset = Trainer.objects.all()
     serializer_class = TrainerSerializer
-
-# AUTENTICACIÓN GITHUB
+    permission_classes = [IsAdminOrReadOnly]
 
 class GitHubLoginAPIView(APIView):
-    # Endpoint público, el usuario aún no tiene JWT local
     permission_classes = []
 
     def post(self, request, *args, **kwargs):
@@ -35,7 +43,6 @@ class GitHubLoginAPIView(APIView):
         client_id = 'Ov23likwZH3eFzuhDbEn'
         client_secret = 'd65ffe418abd7b1d24a2d735f30c1bd0fab7c2bf'
 
-        # 1. Intercambio del código temporal por el access_token de GitHub
         token_response = requests.post(
             'https://github.com/login/oauth/access_token',
             data={
@@ -54,7 +61,6 @@ class GitHubLoginAPIView(APIView):
                 status=status.HTTP_401_UNAUTHORIZED
             )
 
-        # 2. Consumo de la API de GitHub para obtener la identidad del usuario
         user_response = requests.get(
             'https://api.github.com/user',
             headers={'Authorization': f'Bearer {access_token}'}
@@ -67,7 +73,6 @@ class GitHubLoginAPIView(APIView):
         username = user_data.get('login')
         email = user_data.get('email')
 
-        # Si el correo está oculto, forzamos su obtención
         if not email:
             email_response = requests.get(
                 'https://api.github.com/user/emails',
@@ -80,7 +85,6 @@ class GitHubLoginAPIView(APIView):
         if not email:
             email = f"{username}@github-placeholder.com"
 
-        # 3. Consolidación del usuario local en SQLite
         user, created = User.objects.get_or_create(
             username=username,
             defaults={
@@ -89,7 +93,6 @@ class GitHubLoginAPIView(APIView):
             }
         )
         
-        # 4. Emisión de JWT local
         refresh = RefreshToken.for_user(user)
         
         return Response({
@@ -97,6 +100,7 @@ class GitHubLoginAPIView(APIView):
             "refresh": str(refresh),
             "user": {
                 "username": user.username,
-                "email": user.email
+                "email": user.email,
+                "is_admin": user.is_staff or user.groups.filter(name='Admin').exists()
             }
         }, status=status.HTTP_200_OK)
