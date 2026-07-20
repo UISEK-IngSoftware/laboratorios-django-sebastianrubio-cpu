@@ -1,19 +1,13 @@
 from django.urls import path, include
-from rest_framework import routers
-from .views import PokemonViewSet, TrainerViewSet, GitHubLoginAPIView
-from django.conf import settings
+from rest_framework.routers import DefaultRouter
 from pokedex.auth_view import CustomTokenView
-from django.contrib import admin
+from api.views import PokemonViewSet, TrainerViewSet
 
-router = routers.DefaultRouter()
+router = DefaultRouter()
 router.register(r'pokemons', PokemonViewSet, basename='pokemon')
 router.register(r'trainers', TrainerViewSet, basename='trainer')
 
 urlpatterns = [
-
+    path('oauth/token/', CustomTokenView.as_view(), name='oauth2_token'),
     path('', include(router.urls)),
-    path('admin/', admin.site.urls),
-    path('api/v1/catalog/', include('catalog.urls')),
-    path('api/v1/o/token/', CustomTokenView.as_view(), name='token'),
-    path('api/v1/o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 ]
