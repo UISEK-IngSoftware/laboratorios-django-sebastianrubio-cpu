@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from .serializer import PokemonSerializer, TrainerSerializer
 from pokedex.models import Pokemon, Trainer
 from django.contrib.auth import authenticate
+from oauth2_provider.models import Application
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):
@@ -29,19 +30,20 @@ class TrainerViewSet(viewsets.ModelViewSet):
     serializer_class = TrainerSerializer
     permission_classes = [IsAdminOrReadOnly]
 
-    
+
 class OAuth2TokenAPIView(APIView):
     permission_classes = []
 
     def post(self, request, *args, **kwargs):
         grant_type = request.data.get('grant_type')
         client_id = request.data.get('client_id')
-        client_secret = request.data.get('client_secret')
 
         if grant_type != 'password':
             return Response({"error": "unsupported_grant_type"}, status=status.HTTP_400_BAD_REQUEST)
 
-        if client_id != 'pokedex_spa_client' or client_secret != 'd65ffe418abd7b1d24a2d735f30c1bd0f':
+        try:
+            app = Application.objects.get(client_id=client_id, client_type='public')
+        except Application.DoesNotExist:
             return Response({"error": "invalid_client"}, status=status.HTTP_401_UNAUTHORIZED)
 
         username = request.data.get('username')
@@ -60,4 +62,4 @@ class OAuth2TokenAPIView(APIView):
             "refresh_token": str(refresh),
             "token_type": "Bearer",
             "expires_in": 3600
-        }, status=status.HTTP_200_OK)
+        }, status=status.HTTP_200_OK)   
