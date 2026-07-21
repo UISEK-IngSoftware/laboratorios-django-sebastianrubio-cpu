@@ -1,9 +1,9 @@
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
+from rest_framework import routers
 from pokedex.auth_view import CustomTokenView
-from api.views import PokemonViewSet, TrainerViewSet
+from .views import PokemonViewSet, TrainerViewSet
 
-router = DefaultRouter()
+router = routers.DefaultRouter()
 router.register(r'pokemons', PokemonViewSet, basename='pokemon')
 router.register(r'trainers', TrainerViewSet, basename='trainer')
 
