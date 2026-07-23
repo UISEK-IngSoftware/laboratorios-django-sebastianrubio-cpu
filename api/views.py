@@ -1,14 +1,13 @@
-from rest_framework import permissions
+from rest_framework import permissions, status, viewsets, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework import viewsets
 from django.contrib.auth.models import User
-from .serializer import PokemonSerializer, TrainerSerializer
-from pokedex.models import Pokemon, Trainer
 from django.contrib.auth import authenticate
 from oauth2_provider.models import Application
+from .serializer import PokemonSerializer, TrainerSerializer, RegisterSerializer
+from pokedex.models import Pokemon, Trainer
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):
@@ -19,7 +18,11 @@ class IsAdminOrReadOnly(permissions.BasePermission):
         return request.user and request.user.is_authenticated and (
             request.user.is_staff or request.user.groups.filter(name='Admin').exists()
         )
-
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = (AllowAny,)
+    serializer_class = RegisterSerializer
+    
 class PokemonViewSet(viewsets.ModelViewSet):
     queryset = Pokemon.objects.all()
     serializer_class = PokemonSerializer
